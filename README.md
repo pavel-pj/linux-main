@@ -7,18 +7,19 @@ DAY 4 : File System
 
 RAID
 
-Create Raid
-
+### create Raid
+```bash
 sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
-
-//CHECK :
-
+```
+#### check :
+```bash
 sudo cat /proc/mdstat
+```
 
-//File system :
-
+File system :
+```bash
 sudo mkfs.ext4 /dev/md0 
-
+```
 //Mount
 
 sudo mount /dev/md0 /mnt
