@@ -3,11 +3,12 @@
 
 
 
-DAY 4 : File System
+# DAY 4 : File System
+## Создание отказоустойивого хранилища
 
-RAID
+### Raid
 
-### create Raid
+#### create Raid
 ```bash
 sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
 ```
@@ -16,57 +17,79 @@ sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
 sudo cat /proc/mdstat
 ```
 
-File system :
+#### create file system :
 ```bash
 sudo mkfs.ext4 /dev/md0 
 ```
-//Mount
-
+#### Mount to derictory
+```bash
 sudo mount /dev/md0 /mnt
-
-//Create a file to check
-
+```
+####  create a file to check
+```bash
 sudo echo "Hello world" > /mnt/newfile
 cat /mnt/newfile
-
-//fail one disk
+```
+#### fail one disk
+```bash
 sudo mdadm --fail /dev/md0 /dev/sdc
-
-//CHECK :
+```
+#### check:
+```bash
 sudo cat /proc/mdstat
+```
 
-//check everything is ready to read
-
+#### check everything is ready to read
+```bash
 cat /mnt/newfile
+```
 
-//delete
+#### delete
+```bash
 sudo umount /dev/md0
 sudo mdadm --stop /dev/md0
 sudo mdadm --zero-superblock /dev/sdc /dev/sdb
+```
 
 
+# LVM
+## Разбивка диска на директории
 
-LVM
-
-//create
+#### create a physical device
+```bash
 sudo pvcreate /dev/sdb /dev/sdc
-
-//show
+```
+#### show a physical device
+```bash
 sudo pvdisplay
-
-//gropped
-
+```
+#### create a group
+```bash
 sudo vgcreate data_vg /dev/sdb /dev/sdc
+```
 
-//show
+#### show group
+```bash
 sudo vgdisplay 
+```
 
-//create lv
+#### create logical volume 1
+```bash
 sudo lvcreate -L 1G -n files_lv data_vg
+```
+#### create logical volume 2
+```bash
+sudo lvcreate -L 6G -n data_lv data_vg
+```
 
-//files system :
-
+#### make file system  1 :
+```bash
 sudo mkfs.ext4 /dev/data_vg/files_lv
+```
+#### make file system 2 :
+```bash
+sudo mkfs.ext4 /dev/data_vg/data_lv
+```
 
 //mount 
 sudo mount /dev/data_vg_/files_lv /mnt
