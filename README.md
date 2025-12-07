@@ -1,7 +1,45 @@
 # linux-main
 
+# DAY 3 : Users
 
+#### check ussers
 
+```bash
+sudo cat /etc/passwd
+```
+#### check users and passwords hash 
+
+```bash
+sudo cat /etc/shadow
+```
+#### check group
+```bash
+sudo cat /etc/group
+```
+#### create user
+```bash
+sudo useradd -m -s /bin/bash junior_admin
+```
+
+#### add to group
+```bash
+sudo usermod -aG sudo junior_admin
+```
+
+#### add to group
+```bash
+sudo deluser junior_admin sudo
+```
+
+#### delete user :
+```bash
+ sudo deluser junior
+```
+
+#### delete group :
+```bash
+ sudo groupdel junior_admins
+```
 
 # DAY 4 : File System
 ## Создание отказоустойивого хранилища
@@ -91,57 +129,73 @@ sudo mkfs.ext4 /dev/data_vg/files_lv
 sudo mkfs.ext4 /dev/data_vg/data_lv
 ```
 
-//mount 
+####  mount 
+```bash
 sudo mount /dev/data_vg_/files_lv /mnt
+```
 
-change +
+####  mount 
+```bash
+sudo mount /dev/data_vg_/data_lv /backup
+```
+
+#### increase volume
+#### from this output get a path to the next command :
+
+```bash
 df -h
-
-from this output get a path to the next command :
-sudo extend -L +1G  /dev/mapper/data_vg-files_lv
-
-there is on increase in files_lv
+```
+```bash
+sudo lvextend -L +1G  /dev/mapper/data_vg-files_lv
+```
+#### there is on increase in files_lv
+```bash
 df -h 
- 
+```
+
+#### change file system
+```bash
 sudo resize2fs /dev/data_vg/files_lv
+```
 
-check
+####  check
 df -h
+ 
+####  decrease other disk :
 
-
-
-
-
-make lv less :
-
+```bash
 sudo umount /backup
 sudo e2fsck -f /dev/mapper/data_vg-data_lv
 sudo resize2fs /dev/mapper/data_vg-data_lv 4G
 sudo lvreduce -L 4G /dev/mapper/data_vg-data_lv 
+```
 
-Adding other 2 GB to files
+#### Adding 2 GB to the first volume
+```bash
 sudo lvextend -L +2G  /dev/mapper/data_vg-files_lv
 sudo resize2fs /dev/data_vg/files_lv
 df -h 
-
-
-deactivate logical volume
+```
+ 
+####  deactivate logical volume
+```bash
 sudo umount /mnt
 sudo lvchange -an /dev/data_vg/files_lv
 sudo lvremove /dev/data_vg/files_lv
-
-the same for data_lv
+```
+####  the same for data_lv
+```bash
 sudo umount /backup
 sudo lvchange -an /dev/data_vg/data_lv
 sudo lvremove /dev/data_vg/data_lv
+```
 
-//remove volume group
+####  remove volume group and phisical volumes
+```bash
 sudo vgremove data_vg
-
-//remove phisical volumes
-
 sudo pvremove /dev/sdb
 sudo pvremove /dev/sdc
+```
 
 
 
