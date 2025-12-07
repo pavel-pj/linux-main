@@ -1,6 +1,7 @@
 # linux-main
 
-# DAY 3 : Users
+# DAY 3 
+## Users
 
 #### check ussers
 
@@ -8,38 +9,121 @@
 sudo cat /etc/passwd
 ```
 #### check users and passwords hash 
-
 ```bash
 sudo cat /etc/shadow
+```
+
+ 
+#### create group
+```bash
+sudo groupadd  junior_admins
 ```
 #### check group
 ```bash
 sudo cat /etc/group
+
+
 ```
 #### create user
 ```bash
-sudo useradd -m -s /bin/bash junior_admin
+sudo useradd -m -s /bin/bash intern -G junior_admins
 ```
 
 #### add to group
 ```bash
-sudo usermod -aG sudo junior_admin
+sudo usermod -aG intern junior_admins
 ```
 
-#### add to group
+#### check who are in group
 ```bash
-sudo deluser junior_admin sudo
+getent group junior_admin
+```
+ 
+
+#### create password
+```bash
+sudo passwd intern
 ```
 
+#### check password options and make 30 days expiration
+```bash
+sudo chage -l intern
+sido chage -M 30 intern
+sudo chage -l intern
+``` 
+
+#### it doesnnt work without rights
+```bash
+su intern
+id intern
+sudo apt update
+```
+
+#### check additional oprtions
+```bash
+sudo cat /etc/sudoers/
+sudo visudo
+%junior_admins ALL=(root) /usr/bin/apt
+```
+
+#### it works no
+```bash
+su intern
+sudo apt update
+```
+ 
+
+#### (LOCK) block user
+```bash
+sudo passwd-l intern
+su intern
+```
+
+#### (UNLOCK) unblock user
+```bash
+sudo passwd -u intern
+su intern
+```
+ 
+
+#### remove user from a group
+```bash
+sudo gpasswd -d intern junior_admins
+```
+ 
+ 
 #### delete user :
 ```bash
- sudo deluser junior
+ sudo deluser --remove-hone intern
 ```
 
 #### delete group :
 ```bash
  sudo groupdel junior_admins
 ```
+
+
+## Procecces ( check a PID from ps auxf - ex:10087)
+```bash
+ sudo systemctl restart nginx
+ ps auxw |grep nginx
+ cd /proc/10087
+ sudo cat cmdline | tr '\0' '\n'
+```
+
+## Procecces in BACKGROUND
+```bash
+ sleep 1000
+ CTRL + Z
+ bg
+ jobs
+ fg 1
+ jobs 
+ sleep 1000 &
+ jobs
+```
+
+
 
 # DAY 4 : File System
 ## Создание отказоустойивого хранилища
