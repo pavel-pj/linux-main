@@ -31,6 +31,27 @@ mtr 103.95.114.117 -T
 sudo tcpdump not port 22 -i any
 ```
 
+##IP - to find diveces in my sub-net
 
+```bash
+sudo arp-scan --localnet
+```
+
+```bash
+ip address
+```
+
+### default via - for ex: 192.0.0.7 - the ip which PC went to internet
+```bash
+ip route
+```
+
+### JSON data
+```bash
+ip route  -j route | jq
+ip route -4 -j route | jq
+ip route -6 -j route | jq
+ip route  -j address | jq
+```
 
 
